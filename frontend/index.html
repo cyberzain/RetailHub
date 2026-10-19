@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Modern Cloud POS & Store Management</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link active" href="index.html">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a class="nav-link" href="pos.html">
+          <i class="fa-solid fa-cash-register"></i> POS Terminal
+          <span class="badge badge-success">Live</span>
+        </a>
+        <a class="nav-link" href="sales.html">
+          <i class="fa-solid fa-receipt"></i> Sales History
+        </a>
+        <a class="nav-link" href="invoices.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html">
+          <i class="fa-solid fa-box-open"></i> Products
+        </a>
+        <a class="nav-link" href="inventory.html">
+          <i class="fa-solid fa-warehouse"></i> Inventory
+        </a>
+        <a class="nav-link" href="purchases.html">
+          <i class="fa-solid fa-cart-flatbed"></i> Purchase Orders
+        </a>
+        <a class="nav-link" href="suppliers.html">
+          <i class="fa-solid fa-truck-field"></i> Suppliers
+        </a>
+
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="customers.html">
+          <i class="fa-solid fa-users"></i> Customers (CRM)
+        </a>
+        <a class="nav-link" href="reports.html">
+          <i class="fa-solid fa-chart-line"></i> Analytics & Reports
+        </a>
+        <a class="nav-link" href="staff.html">
+          <i class="fa-solid fa-user-shield"></i> Staff & Shifts
+        </a>
+        <a class="nav-link" href="settings.html">
+          <i class="fa-solid fa-gear"></i> Store Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" title="Toggle Navigation"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title-group">
+            <h1>Executive Dashboard</h1>
+            <p>Real-time retail performance, sales revenue and operations overview</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search orders, products, skus...">
+          </div>
+          <a href="pos.html" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-bolt"></i> Quick Sale
+          </a>
+          <div class="user-badge" onclick="window.location.href='settings.html'">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Store Owner</span>
+            </div>
+            <i class="fa-solid fa-angle-down" style="font-size: 11px; color: var(--text-subtle);"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard View Body -->
+      <div class="page-container">
+        <!-- Key Metrics Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div>
+              <div class="metric-title">Today's Sales</div>
+              <div class="metric-value" id="stat-sales">₹0</div>
+              <div class="metric-trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i> +14.8% vs yesterday
+              </div>
+            </div>
+            <div class="metric-icon-wrap primary">
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+          </div>
+
+          <div class="metric-card success">
+            <div>
+              <div class="metric-title">Total Active Products</div>
+              <div class="metric-value" id="stat-products">0</div>
+              <div class="metric-trend up">
+                <i class="fa-solid fa-check"></i> Catalog healthy
+              </div>
+            </div>
+            <div class="metric-icon-wrap success">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+          </div>
+
+          <div class="metric-card warning">
+            <div>
+              <div class="metric-title">Low Stock Alerts</div>
+              <div class="metric-value" id="stat-low-stock">0</div>
+              <div class="metric-trend down">
+                <i class="fa-solid fa-triangle-exclamation"></i> Reorder suggested
+              </div>
+            </div>
+            <div class="metric-icon-wrap warning">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+          </div>
+
+          <div class="metric-card info">
+            <div>
+              <div class="metric-title">Registered Customers</div>
+              <div class="metric-value" id="stat-customers">0</div>
+              <div class="metric-trend up">
+                <i class="fa-solid fa-users"></i> Repeat buyers 64%
+              </div>
+            </div>
+            <div class="metric-icon-wrap info">
+              <i class="fa-solid fa-user-tag"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts & Quick Action Center -->
+        <div class="dashboard-grid">
+          <!-- Sales Revenue Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-chart-area" style="color: var(--primary);"></i> Revenue & Sales Trends
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <span class="badge badge-primary">Last 7 Days</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="salesChart" height="110"></canvas>
+            </div>
+          </div>
+
+          <!-- Quick Shortcuts & System Status -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b;"></i> Quick Launch</div>
+              </div>
+              <div class="card-body" style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="pos.html" class="btn btn-primary" style="justify-content: flex-start;">
+                  <i class="fa-solid fa-cash-register"></i> Open POS Terminal
+                </a>
+                <a href="products.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                  <i class="fa-solid fa-plus-circle"></i> Add New Product
+                </a>
+                <a href="purchases.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                  <i class="fa-solid fa-truck-ramp-box"></i> New Purchase Order
+                </a>
+                <a href="customers.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                  <i class="fa-solid fa-user-plus"></i> Register Customer
+                </a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><i class="fa-solid fa-network-wired" style="color: var(--secondary);"></i> Backend Collab Sync</div>
+              </div>
+              <div class="card-body">
+                <p id="backend-detail" style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 12px;">
+                  Checking connection to Express API...
+                </p>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--text-subtle);">Port 5000</span>
+                  <a href="settings.html" class="btn btn-secondary btn-sm">Configure API</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions & Low Stock Table -->
+        <div class="dashboard-grid">
+          <!-- Recent Orders -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</div>
+              <a href="sales.html" class="btn btn-secondary btn-sm">View All Sales</a>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Invoice ID</th>
+                    <th>Customer</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-sales-table">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 24px;">Loading transactions...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Stock Alerts -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> Low Stock Notice</div>
+              <a href="inventory.html" class="btn btn-secondary btn-sm">Manage</a>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>In Stock</th>
+                    <th>Min</th>
+                  </tr>
+                </thead>
+                <tbody id="low-stock-table">
+                  <tr>
+                    <td colspan="3" style="text-align: center; padding: 24px;">Checking inventory...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

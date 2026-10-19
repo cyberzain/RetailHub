@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Shop Onboarding Wizard</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    body {
+      background: var(--bg-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .wizard-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+    .wizard-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+    .step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    .step-node.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+    .step-node.completed .step-circle {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step-node.active .step-label {
+      color: var(--primary);
+    }
+    .step-content {
+      display: none;
+    }
+    .step-content.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Onboarding Header -->
+  <header style="background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;">
+    <div class="brand-logo">
+      <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+      <span>Retail</span>Hub Onboarding
+    </div>
+    <span class="badge badge-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Store Setup Wizard</span>
+  </header>
+
+  <div class="wizard-container">
+    <!-- Steps Indicator -->
+    <div class="wizard-steps">
+      <div class="step-node active" id="stepNode1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Store Details</div>
+      </div>
+      <div class="step-node" id="stepNode2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Taxes & Currency</div>
+      </div>
+      <div class="step-node" id="stepNode3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Departments</div>
+      </div>
+      <div class="step-node" id="stepNode4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Ready to Launch</div>
+      </div>
+    </div>
+
+    <!-- Step 1: Store Details -->
+    <div class="card step-content active" id="step1">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-shop" style="color: var(--primary);"></i> Step 1: Store Profile & Address</div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Shop Name <span class="required">*</span></label>
+          <input type="text" id="obShopName" class="form-control" value="RetailHub Flagship Store">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Customer Support Phone</label>
+            <input type="tel" id="obPhone" class="form-control" value="+91 (022) 8877-6655">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="obEmail" class="form-control" value="contact@retailhubstore.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Store Physical Address</label>
+          <textarea id="obAddress" class="form-control" rows="2">Shop 14, Commercial Plaza, Bandra West, Mumbai 400050</textarea>
+        </div>
+      </div>
+      <div class="card-header" style="justify-content: flex-end; border-top: 1px solid var(--border-light); border-bottom: none;">
+        <button type="button" class="btn btn-primary" onclick="goToStep(2)">
+          Next: Taxes & Currency <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Taxes & Currency -->
+    <div class="card step-content" id="step2">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-calculator" style="color: var(--primary);"></i> Step 2: Taxes & Currency Format</div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Base Currency</label>
+            <select id="obCurrency" class="form-select">
+              <option value="INR">INR - Indian Rupee (₹)</option>
+              <option value="USD">USD - US Dollar ($)</option>
+              <option value="EUR">EUR - Euro (€)</option>
+              <option value="GBP">GBP - British Pound (£)</option>
+              <option value="AED">AED - UAE Dirham</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Default Tax / GST Rate (%)</label>
+            <input type="number" id="obTaxRate" class="form-control" value="18" min="0" max="100">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">GSTIN / Tax Registration Number</label>
+          <input type="text" id="obGstin" class="form-control" value="27AABCR1234D1ZP">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Receipt Footer Message</label>
+          <input type="text" id="obReceiptFooter" class="form-control" value="Thank you for shopping with us! Visit again.">
+        </div>
+      </div>
+      <div class="card-header" style="justify-content: space-between; border-top: 1px solid var(--border-light); border-bottom: none;">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+          Next: Departments <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Departments & Categories -->
+    <div class="card step-content" id="step3">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-boxes-stacked" style="color: var(--primary);"></i> Step 3: Store Departments</div>
+      </div>
+      <div class="card-body">
+        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px;">
+          Select the initial retail categories you'll be selling in your store:
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
+          <label style="display: flex; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; background: var(--surface);">
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px;">Consumer Electronics</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Smartphones, Laptops, Gadgets</div>
+            </div>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; background: var(--surface);">
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px;">Audio & Headphones</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Earbuds, Speakers, Microphones</div>
+            </div>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; background: var(--surface);">
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px;">Apparel & Fashion</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Shirts, Denim, Accessories</div>
+            </div>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; background: var(--surface);">
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+            <div>
+              <div style="font-weight: 700; font-size: 13.5px;">Footwear</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Sneakers, Boots, Casuals</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="card-header" style="justify-content: space-between; border-top: 1px solid var(--border-light); border-bottom: none;">
+        <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="btn btn-primary" onclick="goToStep(4)">
+          Next: Finalize Setup <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: Ready to Launch -->
+    <div class="card step-content" id="step4">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> Step 4: Ready to Launch</div>
+      </div>
+      <div class="card-body" style="text-align: center; padding: 36px 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--success-light); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">Your Store is Configured!</h2>
+        <p style="font-size: 13.5px; color: var(--text-muted); max-width: 460px; margin: 0 auto 24px;">
+          Sample inventory, suppliers, cash float, and POS configurations have been generated and synced with your merchant settings.
+        </p>
+
+        <button type="button" class="btn btn-primary btn-lg" onclick="finishOnboarding()">
+          <i class="fa-solid fa-chart-pie"></i> Open Main Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function goToStep(num) {
+      document.querySelectorAll(".step-content").forEach(c => c.classList.remove("active"));
+      document.querySelectorAll(".step-node").forEach((n, idx) => {
+        n.classList.remove("active");
+        if (idx + 1 < num) n.classList.add("completed");
+        else n.classList.remove("completed");
+      });
+
+      document.getElementById(`step${num}`).classList.add("active");
+      document.getElementById(`stepNode${num}`).classList.add("active");
+    }
+
+    async function finishOnboarding() {
+      const settings = await api.getSettings();
+      settings.shopName = document.getElementById("obShopName").value;
+      settings.phone = document.getElementById("obPhone").value;
+      settings.address = document.getElementById("obAddress").value;
+      settings.currency = document.getElementById("obCurrency").value;
+      settings.currencySymbol = settings.currency === "USD" ? "$" : (settings.currency === "EUR" ? "€" : "₹");
+      settings.taxRate = Number(document.getElementById("obTaxRate").value);
+      settings.gstin = document.getElementById("obGstin").value;
+      settings.receiptFooter = document.getElementById("obReceiptFooter").value;
+
+      await api.saveSettings(settings);
+      showToast("Store setup saved! Welcome to RetailHub.", "success");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 700);
+    }
+  </script>
+</body>
+</html>

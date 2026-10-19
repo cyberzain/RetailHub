@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Staff Management & Store Roster</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a class="nav-link" href="pos.html">
+          <i class="fa-solid fa-cash-register"></i> POS Terminal
+          <span class="badge badge-success">Live</span>
+        </a>
+        <a class="nav-link" href="sales.html">
+          <i class="fa-solid fa-receipt"></i> Sales History
+        </a>
+        <a class="nav-link" href="invoices.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html">
+          <i class="fa-solid fa-box-open"></i> Products
+        </a>
+        <a class="nav-link" href="inventory.html">
+          <i class="fa-solid fa-warehouse"></i> Inventory
+        </a>
+        <a class="nav-link" href="purchases.html">
+          <i class="fa-solid fa-cart-flatbed"></i> Purchase Orders
+        </a>
+        <a class="nav-link" href="suppliers.html">
+          <i class="fa-solid fa-truck-field"></i> Suppliers
+        </a>
+
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="customers.html">
+          <i class="fa-solid fa-users"></i> Customers (CRM)
+        </a>
+        <a class="nav-link" href="reports.html">
+          <i class="fa-solid fa-chart-line"></i> Analytics & Reports
+        </a>
+        <a class="nav-link active" href="staff.html">
+          <i class="fa-solid fa-user-shield"></i> Staff & Shifts
+        </a>
+        <a class="nav-link" href="settings.html">
+          <i class="fa-solid fa-gear"></i> Store Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title-group">
+            <h1>Staff & Shift Scheduling</h1>
+            <p>Store team roster, role assignments, cash counter permissions and access control</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-primary" onclick="openAddStaffModal()">
+            <i class="fa-solid fa-user-plus"></i> Add Staff Account
+          </button>
+          <div class="user-badge" onclick="toggleUserMenu()">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Store Owner</span>
+            </div>
+            <i class="fa-solid fa-angle-down" style="font-size: 11px; color: var(--text-subtle);"></i>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container">
+        <!-- Staff Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div>
+              <div class="metric-title">Total Staff Headcount</div>
+              <div class="metric-value" id="staffTotalCount">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-users-gear"></i> Total accounts</div>
+            </div>
+            <div class="metric-icon-wrap primary"><i class="fa-solid fa-id-card-clip"></i></div>
+          </div>
+
+          <div class="metric-card success">
+            <div>
+              <div class="metric-title">Active Duty</div>
+              <div class="metric-value" id="staffOnDutyCount">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-circle-check"></i> Authorized to login</div>
+            </div>
+            <div class="metric-icon-wrap success"><i class="fa-solid fa-business-time"></i></div>
+          </div>
+
+          <div class="metric-card info">
+            <div>
+              <div class="metric-title">Salespersons / Cashiers</div>
+              <div class="metric-value" id="staffCashiersCount">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-cash-register"></i> POS access only</div>
+            </div>
+            <div class="metric-icon-wrap info"><i class="fa-solid fa-calculator"></i></div>
+          </div>
+
+          <div class="metric-card warning">
+            <div>
+              <div class="metric-title">Managers & Admins</div>
+              <div class="metric-value" id="staffManagersCount">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-user-shield"></i> Elevated access</div>
+            </div>
+            <div class="metric-icon-wrap warning"><i class="fa-solid fa-shield-halved"></i></div>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div class="search-box" style="width: 320px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="staffSearch" placeholder="Search by name, role, email, phone..." oninput="filterStaff()">
+          </div>
+          <div style="font-size: 12.5px; color: var(--text-muted);">
+            <i class="fa-solid fa-lock" style="color: var(--primary);"></i> RBAC Protection: Salespeople can only be added or modified by authorized Managers and Owners.
+          </div>
+        </div>
+
+        <!-- Staff Table -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Assigned Role</th>
+                  <th>Contact Info</th>
+                  <th>Shift Schedule</th>
+                  <th>Account Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 25px;">Loading team roster...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Staff Modal -->
+  <div class="modal-overlay" id="addStaffModal">
+    <div class="modal" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Create New Staff Account</h3>
+        <button class="modal-close" onclick="closeModal('addStaffModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="addStaffForm" onsubmit="saveNewStaff(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Full Employee Name <span class="required">*</span></label>
+            <input type="text" id="newStaffName" class="form-control" required placeholder="e.g. Ramesh Chandra">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Assigned Role <span class="required">*</span></label>
+              <select id="newStaffRole" class="form-select" required>
+                <option value="Salesperson">Salesperson (POS & Billing Only)</option>
+                <option value="Manager" id="optRoleManager">Store Manager (Dashboard & Management)</option>
+              </select>
+              <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 3px;" id="roleHelperText">
+                Salesperson accounts only have access to POS checkout and cannot view financial profits.
+              </small>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shift Schedule <span class="required">*</span></label>
+              <select id="newStaffShift" class="form-select" required>
+                <option value="Morning (09:00 - 17:00)">Morning (09:00 - 17:00)</option>
+                <option value="Evening (13:00 - 21:00)">Evening (13:00 - 21:00)</option>
+                <option value="Full Day (09:00 - 21:00)">Full Day (09:00 - 21:00)</option>
+                <option value="Night (21:00 - 06:00)">Night (21:00 - 06:00)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Login Email Address <span class="required">*</span></label>
+              <input type="email" id="newStaffEmail" class="form-control" required placeholder="ramesh@retailhub.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number <span class="required">*</span></label>
+              <input type="tel" id="newStaffPhone" class="form-control" required placeholder="+91 98765 43210">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Initial Password <span class="required">*</span></label>
+            <div class="input-group">
+              <i class="fa-solid fa-lock input-prefix"></i>
+              <input type="password" id="newStaffPassword" class="form-control has-prefix" required minlength="6" placeholder="Min. 6 characters (e.g. admin123)">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addStaffModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveStaff">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Staff Modal -->
+  <div class="modal-overlay" id="editStaffModal">
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-user-pen" style="color: var(--primary);"></i> Edit Staff Member</h3>
+        <button class="modal-close" onclick="closeModal('editStaffModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="editStaffForm" onsubmit="saveEditStaff(event)">
+        <input type="hidden" id="editStaffId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Employee Full Name <span class="required">*</span></label>
+            <input type="text" id="editStaffName" class="form-control" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" id="editStaffPhone" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shift Schedule</label>
+              <select id="editStaffShift" class="form-select">
+                <option value="Morning (09:00 - 17:00)">Morning (09:00 - 17:00)</option>
+                <option value="Evening (13:00 - 21:00)">Evening (13:00 - 21:00)</option>
+                <option value="Full Day (09:00 - 21:00)">Full Day (09:00 - 21:00)</option>
+                <option value="Night (21:00 - 06:00)">Night (21:00 - 06:00)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" id="editRoleGroup">
+            <label class="form-label">Role</label>
+            <select id="editStaffRole" class="form-select">
+              <option value="Salesperson">Salesperson</option>
+              <option value="Manager">Store Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editStaffModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset Staff Password Modal -->
+  <div class="modal-overlay" id="resetStaffPassModal">
+    <div class="modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-key" style="color: var(--primary);"></i> Reset Staff Password</h3>
+        <button class="modal-close" onclick="closeModal('resetStaffPassModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="resetStaffPassForm" onsubmit="saveStaffPassReset(event)">
+        <input type="hidden" id="resetPassStaffId">
+        <div class="modal-body">
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+            Set a new temporary login password for <strong id="resetPassStaffName">Employee</strong>:
+          </p>
+          <div class="form-group">
+            <label class="form-label">New Password <span class="required">*</span></label>
+            <div class="input-group">
+              <i class="fa-solid fa-lock input-prefix"></i>
+              <input type="password" id="staffNewPassword" class="form-control has-prefix" required minlength="6" placeholder="Min. 6 characters">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('resetStaffPassModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/staff.js"></script>
+</body>
+</html>

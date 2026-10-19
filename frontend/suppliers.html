@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Supplier & Vendor Management</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a class="nav-link" href="pos.html">
+          <i class="fa-solid fa-cash-register"></i> POS Terminal
+          <span class="badge badge-success">Live</span>
+        </a>
+        <a class="nav-link" href="sales.html">
+          <i class="fa-solid fa-receipt"></i> Sales History
+        </a>
+        <a class="nav-link" href="invoices.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html">
+          <i class="fa-solid fa-box-open"></i> Products
+        </a>
+        <a class="nav-link" href="inventory.html">
+          <i class="fa-solid fa-warehouse"></i> Inventory
+        </a>
+        <a class="nav-link" href="purchases.html">
+          <i class="fa-solid fa-cart-flatbed"></i> Purchase Orders
+        </a>
+        <a class="nav-link active" href="suppliers.html">
+          <i class="fa-solid fa-truck-field"></i> Suppliers
+        </a>
+
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="customers.html">
+          <i class="fa-solid fa-users"></i> Customers (CRM)
+        </a>
+        <a class="nav-link" href="reports.html">
+          <i class="fa-solid fa-chart-line"></i> Analytics & Reports
+        </a>
+        <a class="nav-link" href="staff.html">
+          <i class="fa-solid fa-user-shield"></i> Staff & Shifts
+        </a>
+        <a class="nav-link" href="settings.html">
+          <i class="fa-solid fa-gear"></i> Store Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title-group">
+            <h1>Suppliers & Vendors</h1>
+            <p>Maintain vendor directories, contact details, payment terms and credit ledgers</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-primary" onclick="openSupplierModal()">
+            <i class="fa-solid fa-plus"></i> Add Supplier
+          </button>
+          <div class="user-badge" onclick="window.location.href='settings.html'">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Store Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container">
+        <!-- Supplier Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div>
+              <div class="metric-title">Active Wholesalers</div>
+              <div class="metric-value" id="supCount">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-truck"></i> Verified partners</div>
+            </div>
+            <div class="metric-icon-wrap primary"><i class="fa-solid fa-handshake"></i></div>
+          </div>
+
+          <div class="metric-card warning">
+            <div>
+              <div class="metric-title">Total Outstanding Balance</div>
+              <div class="metric-value" id="supTotalOwed">₹0</div>
+              <div class="metric-trend down"><i class="fa-solid fa-clock-rotate-left"></i> Accounts Payable</div>
+            </div>
+            <div class="metric-icon-wrap warning"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+          </div>
+
+          <div class="metric-card success">
+            <div>
+              <div class="metric-title">Procurement Lead Time</div>
+              <div class="metric-value">2.4 Days</div>
+              <div class="metric-trend up"><i class="fa-solid fa-bolt"></i> Fast fulfillment</div>
+            </div>
+            <div class="metric-icon-wrap success"><i class="fa-solid fa-gauge-high"></i></div>
+          </div>
+
+          <div class="metric-card info">
+            <div>
+              <div class="metric-title">Linked Purchase Orders</div>
+              <div class="metric-value" id="supOrdersCount">3 Orders</div>
+              <div class="metric-trend up"><i class="fa-solid fa-boxes-packing"></i> Active PO cycle</div>
+            </div>
+            <div class="metric-icon-wrap info"><i class="fa-solid fa-box-archive"></i></div>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="action-bar">
+          <div class="search-box" style="width: 320px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="supplierSearch" placeholder="Search supplier name, person, phone..." oninput="filterSuppliers()">
+          </div>
+        </div>
+
+        <!-- Suppliers Table -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Vendor ID & Name</th>
+                  <th>Contact Person</th>
+                  <th>Phone & Email</th>
+                  <th>Location</th>
+                  <th>Balance Due</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="suppliersTableBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 25px;">Loading vendors...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Supplier Modal -->
+  <div class="modal-overlay" id="supplierModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Register New Vendor / Supplier</h3>
+        <button class="modal-close" onclick="closeModal('supplierModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="supplierForm" onsubmit="saveSupplier(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Company / Distributor Name <span class="required">*</span></label>
+            <input type="text" id="supName" class="form-control" required placeholder="e.g. Apex Global Distributing">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Contact Person <span class="required">*</span></label>
+              <input type="text" id="supPerson" class="form-control" required placeholder="e.g. Rajesh Malhotra">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number <span class="required">*</span></label>
+              <input type="text" id="supPhone" class="form-control" required placeholder="+91 99887 76655">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="supEmail" class="form-control" placeholder="orders@distributor.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City / State</label>
+              <input type="text" id="supAddress" class="form-control" placeholder="e.g. Mumbai, MH">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Opening Balance Owed (₹)</label>
+            <input type="number" id="supBalance" class="form-control" value="0" min="0">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('supplierModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/suppliers.js"></script>
+</body>
+</html>

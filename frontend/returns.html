@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Process Return & Refund</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+        <a class="nav-link" href="pos.html"><i class="fa-solid fa-cash-register"></i> POS Terminal <span class="badge badge-success">Live</span></a>
+        <a class="nav-link" href="sales.html"><i class="fa-solid fa-receipt"></i> Sales History</a>
+        <a class="nav-link active" href="returns.html"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
+        <a class="nav-link" href="invoices.html"><i class="fa-solid fa-file-invoice-dollar"></i> Invoices</a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html"><i class="fa-solid fa-box-open"></i> Products</a>
+        <a class="nav-link" href="categories.html"><i class="fa-solid fa-tags"></i> Categories</a>
+        <a class="nav-link" href="inventory.html"><i class="fa-solid fa-warehouse"></i> Inventory & Ledger</a>
+        <a class="nav-link" href="purchases.html"><i class="fa-solid fa-cart-flatbed"></i> Purchase Orders</a>
+        <a class="nav-link" href="suppliers.html"><i class="fa-solid fa-truck-field"></i> Suppliers</a>
+
+        <div class="nav-section-title">Finance & Cash</div>
+        <a class="nav-link" href="expenses.html"><i class="fa-solid fa-money-bill-transfer"></i> Expenses & Register</a>
+        <a class="nav-link" href="customers.html"><i class="fa-solid fa-users"></i> Customers & Khata</a>
+        <a class="nav-link" href="reports.html"><i class="fa-solid fa-chart-line"></i> Analytics & Reports</a>
+
+        <div class="nav-section-title">Store & Growth</div>
+        <a class="nav-link" href="loyalty.html"><i class="fa-solid fa-award"></i> Loyalty & Coupons</a>
+        <a class="nav-link" href="branches.html"><i class="fa-solid fa-code-branch"></i> Multi-Branches</a>
+        <a class="nav-link" href="storefront.html" target="_blank"><i class="fa-solid fa-globe"></i> Online Storefront</a>
+        <a class="nav-link" href="ai-insights.html"><i class="fa-solid fa-brain"></i> AI Insights</a>
+        <a class="nav-link" href="staff.html"><i class="fa-solid fa-user-shield"></i> Staff & Shifts</a>
+        <a class="nav-link" href="settings.html"><i class="fa-solid fa-gear"></i> Store Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Dashboard</a>
+              <span class="separator">/</span>
+              <span class="current">Returns</span>
+            </div>
+            <div class="page-title-group">
+              <h1>Returns & Restock Manager</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <a href="sales.html" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-arrow-left"></i> Sales History
+          </a>
+          <div class="user-badge" onclick="toggleUserMenu()">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container" style="max-width: 900px;">
+        <!-- Find Original Invoice Card -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> 1. Look Up Original Sale Invoice</div>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label class="form-label">Invoice Number (e.g. INV-1094)</label>
+                <input type="text" id="lookupInvoiceId" class="form-control" value="INV-1094" placeholder="INV-1094">
+              </div>
+              <div class="form-group" style="flex: 1; display: flex; align-items: flex-end;">
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-bottom: 18px;" onclick="searchInvoiceForReturn()">
+                  <i class="fa-solid fa-search"></i> Find Invoice
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice Details & Return Form -->
+        <div id="returnDetailsPanel" style="display: none;">
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-rotate-left" style="color: var(--danger);"></i> 2. Select Items to Return</div>
+              <span class="badge badge-primary" id="returnInvBadge">INV-1094</span>
+            </div>
+            <div class="card-body">
+              <div id="invoiceInfoSummary" style="margin-bottom: 16px; font-size: 13.5px; color: var(--text-muted);"></div>
+
+              <div class="table-responsive" style="margin-bottom: 18px;">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;">Return?</th>
+                      <th>Item Description</th>
+                      <th>Sold Qty</th>
+                      <th>Unit Price</th>
+                      <th>Refund Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="returnItemsTbody"></tbody>
+                </table>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Reason for Return <span class="required">*</span></label>
+                <select id="returnReason" class="form-select">
+                  <option value="Customer Dissatisfied">Customer Dissatisfied / Not Needed</option>
+                  <option value="Defective / Damaged Item">Defective / Damaged Item</option>
+                  <option value="Wrong Item Purchased">Wrong Item Purchased / Exchanged</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Refund Payment Mode</label>
+                <select id="refundMode" class="form-select">
+                  <option value="Original Payment Method">Refund to Original Payment Method</option>
+                  <option value="Cash">Cash Refund</option>
+                  <option value="Store Credit">Issue Store Credit Note</option>
+                </select>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 16px; margin-top: 16px;">
+                <div>
+                  <div style="font-size: 12px; color: var(--text-muted);">Total Refund Amount</div>
+                  <div style="font-size: 22px; font-weight: 800; color: var(--danger);" id="totalRefundAmount">₹0.00</div>
+                </div>
+                <button type="button" class="btn btn-danger btn-lg" onclick="executeReturn()">
+                  <i class="fa-solid fa-check"></i> Process Return & Restock
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentSale = null;
+
+    async function searchInvoiceForReturn() {
+      const id = document.getElementById("lookupInvoiceId").value.trim().toUpperCase();
+      const sales = await api.getSales();
+      currentSale = sales.find(s => s.id === id);
+
+      if (!currentSale) {
+        return showToast(`Invoice ${id} not found`, "error");
+      }
+
+      document.getElementById("returnInvBadge").textContent = currentSale.id;
+      document.getElementById("invoiceInfoSummary").innerHTML = `
+        <strong>Customer:</strong> ${currentSale.customer} | 
+        <strong>Date:</strong> ${currentSale.date} | 
+        <strong>Original Total:</strong> ${formatCurrency(currentSale.total)} | 
+        <strong>Status:</strong> ${currentSale.status}
+      `;
+
+      const tbody = document.getElementById("returnItemsTbody");
+      tbody.innerHTML = (currentSale.items || []).map((item, idx) => `
+        <tr>
+          <td>
+            <input type="checkbox" checked id="retCheck_${idx}" onchange="recalculateRefund()">
+          </td>
+          <td><strong>${item.name}</strong></td>
+          <td>${item.qty}</td>
+          <td>${formatCurrency(item.price)}</td>
+          <td>${formatCurrency(item.qty * item.price)}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("returnDetailsPanel").style.display = "block";
+      recalculateRefund();
+    }
+
+    function recalculateRefund() {
+      if (!currentSale) return;
+      let total = 0;
+      (currentSale.items || []).forEach((item, idx) => {
+        const chk = document.getElementById(`retCheck_${idx}`);
+        if (chk && chk.checked) {
+          total += item.qty * item.price;
+        }
+      });
+      document.getElementById("totalRefundAmount").textContent = formatCurrency(total);
+    }
+
+    async function executeReturn() {
+      if (!currentSale) return;
+      const returnedItems = [];
+      let refundAmt = 0;
+
+      (currentSale.items || []).forEach((item, idx) => {
+        const chk = document.getElementById(`retCheck_${idx}`);
+        if (chk && chk.checked) {
+          returnedItems.push(item);
+          refundAmt += item.qty * item.price;
+        }
+      });
+
+      if (returnedItems.length === 0) {
+        return showToast("Select at least one item to return", "warning");
+      }
+
+      const reason = document.getElementById("returnReason").value;
+
+      openConfirmModal({
+        title: "Confirm Return & Restock",
+        message: `Process return of ${returnedItems.length} item(s) for a total refund of ${formatCurrency(refundAmt)}? Items will be restocked to inventory.`,
+        confirmText: "Process Refund",
+        onConfirm: async () => {
+          await api.processReturn(currentSale.id, returnedItems, refundAmt, reason);
+          showToast(`Return processed! Items restocked to inventory.`, "success");
+          setTimeout(() => {
+            window.location.href = "inventory.html";
+          }, 900);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
