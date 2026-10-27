@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Product Categories & Departments</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a class="nav-link" href="pos.html">
+          <i class="fa-solid fa-cash-register"></i> POS Terminal
+          <span class="badge badge-success">Live</span>
+        </a>
+        <a class="nav-link" href="sales.html">
+          <i class="fa-solid fa-receipt"></i> Sales History
+        </a>
+        <a class="nav-link" href="invoices.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html">
+          <i class="fa-solid fa-box-open"></i> Products
+        </a>
+        <a class="nav-link active" href="categories.html">
+          <i class="fa-solid fa-tags"></i> Categories
+        </a>
+        <a class="nav-link" href="inventory.html">
+          <i class="fa-solid fa-warehouse"></i> Inventory & Ledger
+        </a>
+        <a class="nav-link" href="purchases.html">
+          <i class="fa-solid fa-cart-flatbed"></i> Purchase Orders
+        </a>
+        <a class="nav-link" href="suppliers.html">
+          <i class="fa-solid fa-truck-field"></i> Suppliers
+        </a>
+
+        <div class="nav-section-title">Finance & Cash</div>
+        <a class="nav-link" href="expenses.html">
+          <i class="fa-solid fa-money-bill-transfer"></i> Expenses & Register
+        </a>
+        <a class="nav-link" href="customers.html">
+          <i class="fa-solid fa-users"></i> Customers & Khata
+        </a>
+        <a class="nav-link" href="reports.html">
+          <i class="fa-solid fa-chart-line"></i> Analytics & Reports
+        </a>
+
+        <div class="nav-section-title">Store & Growth</div>
+        <a class="nav-link" href="loyalty.html">
+          <i class="fa-solid fa-award"></i> Loyalty & Coupons
+        </a>
+        <a class="nav-link" href="branches.html">
+          <i class="fa-solid fa-code-branch"></i> Multi-Branches
+        </a>
+        <a class="nav-link" href="storefront.html" target="_blank">
+          <i class="fa-solid fa-globe"></i> Online Storefront
+        </a>
+        <a class="nav-link" href="ai-insights.html">
+          <i class="fa-solid fa-brain"></i> AI Insights
+        </a>
+        <a class="nav-link" href="staff.html">
+          <i class="fa-solid fa-user-shield"></i> Staff & Shifts
+        </a>
+        <a class="nav-link" href="settings.html">
+          <i class="fa-solid fa-gear"></i> Store Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Dashboard</a>
+              <span class="separator">/</span>
+              <span class="current">Categories</span>
+            </div>
+            <div class="page-title-group">
+              <h1>Category Management</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="btn btn-primary" onclick="openCategoryModal()">
+            <i class="fa-solid fa-plus"></i> Add Category
+          </button>
+          <div class="user-badge" onclick="toggleUserMenu()">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container">
+        <!-- Filter Bar -->
+        <div class="action-bar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="catSearch" placeholder="Search category name or code..." oninput="filterCategories()">
+          </div>
+        </div>
+
+        <!-- Categories Table Card -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Category Name</th>
+                  <th>Category Code</th>
+                  <th>Assigned Products</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 25px;">Loading categories...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Category Modal -->
+  <div class="modal-overlay" id="categoryModal">
+    <div class="modal" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Category</h3>
+        <button class="modal-close" onclick="closeModal('categoryModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="categoryForm" onsubmit="saveCategory(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Category Name <span class="required">*</span></label>
+            <input type="text" id="catName" class="form-control" required placeholder="e.g. Wearables">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category Code / Short Code <span class="required">*</span></label>
+            <input type="text" id="catCode" class="form-control" required placeholder="e.g. WEAR">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/categories.js"></script>
+</body>
+</html>

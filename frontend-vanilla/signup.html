@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Create Your Shop Account</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #1e3a8a, #0f172a 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      padding: 36px;
+      border: 1px solid var(--border);
+    }
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-brand .brand-icon {
+      margin: 0 auto 12px;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+    }
+    .auth-brand h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .auth-brand p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+      <h2>Start with <span>Retail</span>Hub</h2>
+      <p>Modern Retail Management & Cloud POS Platform</p>
+    </div>
+
+    <form id="signupForm" onsubmit="handleSignup(event)">
+      <div class="form-group">
+        <label class="form-label">Shop / Trade Name <span class="required">*</span></label>
+        <div class="input-group">
+          <i class="fa-solid fa-shop input-prefix"></i>
+          <input type="text" id="shopName" class="form-control has-prefix" required placeholder="e.g. Acme Electronics Store">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Owner Full Name <span class="required">*</span></label>
+          <div class="input-group">
+            <i class="fa-solid fa-user input-prefix"></i>
+            <input type="text" id="ownerName" class="form-control has-prefix" required placeholder="John Doe">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Phone</label>
+          <div class="input-group">
+            <i class="fa-solid fa-phone input-prefix"></i>
+            <input type="tel" id="phone" class="form-control has-prefix" placeholder="+91 98000 11111">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Business Email <span class="required">*</span></label>
+        <div class="input-group">
+          <i class="fa-regular fa-envelope input-prefix"></i>
+          <input type="email" id="email" class="form-control has-prefix" required placeholder="owner@acmestore.com">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Password <span class="required">*</span></label>
+          <div class="input-group">
+            <i class="fa-solid fa-lock input-prefix"></i>
+            <input type="password" id="password" class="form-control has-prefix" required minlength="6" placeholder="Min. 6 chars">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Store Currency</label>
+          <select id="currency" class="form-select">
+            <option value="INR">INR (₹)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="AED">AED</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--text-muted); cursor: pointer;">
+          <input type="checkbox" required checked style="accent-color: var(--primary); margin-top: 3px;">
+          <span>I agree to the Terms of Service, Privacy Policy, and secure data handling standards.</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; font-size: 15px;">
+        <i class="fa-solid fa-rocket"></i> Create Store & Launch Onboarding
+      </button>
+
+      <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
+        Already have a shop registered? <a href="login.html" style="color: var(--primary); font-weight: 600;">Sign in here</a>
+      </div>
+    </form>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    async function handleSignup(e) {
+      e.preventDefault();
+      const shopName = document.getElementById("shopName").value.trim();
+      const ownerName = document.getElementById("ownerName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const phone = document.getElementById("phone").value.trim();
+      const currency = document.getElementById("currency").value;
+
+      showToast("Creating store profile...", "info");
+
+      const res = await api.signup({ shopName, ownerName, email, password, phone, currency });
+      if (res && res.success) {
+        showToast("Account created successfully! Launching onboarding wizard...", "success");
+        setTimeout(() => {
+          window.location.href = "onboarding.html";
+        }, 800);
+      } else {
+        showToast("Error creating account", "error");
+      }
+    }
+  </script>
+</body>
+</html>

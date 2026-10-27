@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Online Public Storefront & Orders</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .storefront-header {
+      background: var(--sidebar-bg);
+      color: #fff;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .storefront-hero {
+      background: linear-gradient(135deg, #091a14 0%, #064e3b 100%);
+      color: #fff;
+      padding: 44px 32px;
+      text-align: center;
+      border-radius: var(--radius-lg);
+      margin: 24px auto;
+      max-width: 1200px;
+    }
+    .storefront-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .store-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      box-shadow: var(--shadow-xs);
+    }
+    .store-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body style="background: var(--bg-body);">
+
+  <!-- Storefront Navigation Header -->
+  <header class="storefront-header">
+    <div style="display: flex; align-items: center; gap: 24px;">
+      <div class="brand-logo" style="color: #fff; display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800;">
+        <div class="brand-icon" style="background: var(--primary);"><i class="fa-solid fa-store"></i></div>
+        <span>Retail</span>Hub <span style="font-size: 11px; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-left: 6px;">Storefront</span>
+      </div>
+      <div class="search-box" style="width: 320px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15);">
+        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8;"></i>
+        <input type="text" id="storeSearch" placeholder="Search catalog..." oninput="filterStoreProducts()" style="color: #fff;">
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="pos.html" class="btn btn-secondary btn-sm" style="color: #fff; border-color: rgba(255,255,255,0.2);">
+        <i class="fa-solid fa-cash-register"></i> Back to POS Portal
+      </a>
+      <button class="btn btn-primary btn-sm" onclick="openModal('storeCartModal')" style="display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-cart-shopping"></i> My Cart (<span id="storeCartBadge">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <!-- Store Hero -->
+  <div class="storefront-hero">
+    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 10px;">Bandra Flagship Online Catalogue</h1>
+    <p style="font-size: 15px; color: #cbd5e1; max-width: 600px; margin: 0 auto 20px;">
+      Explore premium electronics, high-fidelity audio, fashion, and everyday essentials with synchronized inventory.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 12px; font-size: 12px; color: #6ee7b7;">
+      <span><i class="fa-solid fa-shield-halved"></i> 100% Genuine Products</span>
+      <span>•</span>
+      <span><i class="fa-solid fa-truck-fast"></i> Express Local Dispatch</span>
+      <span>•</span>
+      <span><i class="fa-solid fa-rotate-left"></i> 7-Day Exchange</span>
+    </div>
+  </div>
+
+  <!-- Category Filter Pills -->
+  <div style="max-width: 1200px; margin: 0 auto 20px; padding: 0 16px;">
+    <div class="category-pills" id="storeCategoryPills">
+      <button class="category-pill active" onclick="setStoreCategory('ALL')">All Categories</button>
+      <button class="category-pill" onclick="setStoreCategory('Electronics')">Electronics</button>
+      <button class="category-pill" onclick="setStoreCategory('Audio')">Audio</button>
+      <button class="category-pill" onclick="setStoreCategory('Accessories')">Accessories</button>
+      <button class="category-pill" onclick="setStoreCategory('Apparel')">Apparel</button>
+      <button class="category-pill" onclick="setStoreCategory('Footwear')">Footwear</button>
+      <button class="category-pill" onclick="setStoreCategory('Groceries')">Groceries</button>
+      <button class="category-pill" onclick="setStoreCategory('Personal Care')">Personal Care</button>
+    </div>
+  </div>
+
+  <!-- Product Catalog Grid -->
+  <div class="storefront-grid" id="storeCatalogGrid"></div>
+
+  <!-- Shopping Cart Modal -->
+  <div class="modal-overlay" id="storeCartModal">
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h3>
+        <button class="modal-close" onclick="closeModal('storeCartModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="storeCartItemsList" style="max-height: 55vh; overflow-y: auto;"></div>
+      <div class="modal-footer" style="flex-direction: column; align-items: stretch;">
+        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; margin-bottom: 10px;">
+          <span>Total:</span>
+          <span id="storeCartTotal" style="color: var(--primary);">₹0.00</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal('storeCartModal')">Continue Shopping</button>
+          <button type="button" class="btn btn-primary" style="flex: 1;" onclick="proceedToCheckout()">
+            <i class="fa-solid fa-credit-card"></i> Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Storefront Checkout Modal -->
+  <div class="modal-overlay" id="storeCheckoutModal">
+    <div class="modal" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-bag-shopping"></i> Complete Your Order</h3>
+        <button class="modal-close" onclick="closeModal('storeCheckoutModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="handleStoreOrderSubmit(event)">
+        <div class="modal-body">
+          <div class="alert alert-info" style="margin-bottom: 14px; padding: 10px 14px; font-size: 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); color: #1e40af;">
+            <i class="fa-solid fa-lock"></i> <strong>Secure Checkout:</strong> Encrypted payment abstraction. Raw payment card details are never stored.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="orderCustName" class="form-control" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact Mobile *</label>
+            <input type="tel" id="orderCustPhone" class="form-control" placeholder="+91 98765 43210" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Delivery Address / Pickup Instructions *</label>
+            <textarea id="orderAddress" class="form-control" rows="2" placeholder="Apartment / Street / City / Pincode" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <select id="orderPaymentMethod" class="form-select">
+              <option value="Online Order (Cash on Delivery)">Cash on Delivery (COD)</option>
+              <option value="Online Order (UPI - Instant Confirmation)">UPI Online (GPay / PhonePe / Paytm)</option>
+              <option value="Store Pickup (Pay at Counter)">Store Pickup (Bandra Flagship)</option>
+            </select>
+          </div>
+
+          <div style="background: var(--surface-alt); padding: 12px; border-radius: var(--radius-md); margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+              <span>Order Amount:</span>
+              <strong id="checkoutSubtotal">₹0.00</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+              <span>GST (18%):</span>
+              <strong id="checkoutTax">₹0.00</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; border-top: 1px solid var(--border); padding-top: 6px;">
+              <span>Total Payable:</span>
+              <span id="checkoutGrandTotal" style="color: var(--primary);">₹0.00</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('storeCheckoutModal')">Back</button>
+          <button type="submit" class="btn btn-primary" id="btnPlaceOrder">
+            <i class="fa-solid fa-check"></i> Confirm & Place Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Success Modal -->
+  <div class="modal-overlay" id="orderSuccessModal">
+    <div class="modal" style="max-width: 450px; text-align: center;">
+      <div class="modal-body" style="padding: 32px 24px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #ecfdf5; color: #059669; font-size: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Order Placed Successfully!</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Your order has been received and synchronized with our retail inventory ledger.
+        </p>
+        <div style="background: var(--surface-alt); padding: 12px; border-radius: var(--radius-md); font-size: 13px; margin-bottom: 20px;">
+          Order Invoice Reference: <strong id="successInvoiceId" style="color: var(--primary); font-size: 15px;">#INV-1095</strong>
+        </div>
+        <button type="button" class="btn btn-primary" style="width: 100%;" onclick="closeModal('orderSuccessModal')">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/storefront.js"></script>
+</body>
+</html>

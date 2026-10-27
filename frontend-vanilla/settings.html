@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Store Preferences & Backend Sync</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a class="nav-link" href="pos.html">
+          <i class="fa-solid fa-cash-register"></i> POS Terminal
+          <span class="badge badge-success">Live</span>
+        </a>
+        <a class="nav-link" href="sales.html">
+          <i class="fa-solid fa-receipt"></i> Sales History
+        </a>
+        <a class="nav-link" href="invoices.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Invoices
+        </a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html">
+          <i class="fa-solid fa-box-open"></i> Products
+        </a>
+        <a class="nav-link" href="inventory.html">
+          <i class="fa-solid fa-warehouse"></i> Inventory
+        </a>
+        <a class="nav-link" href="purchases.html">
+          <i class="fa-solid fa-cart-flatbed"></i> Purchase Orders
+        </a>
+        <a class="nav-link" href="suppliers.html">
+          <i class="fa-solid fa-truck-field"></i> Suppliers
+        </a>
+
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="customers.html">
+          <i class="fa-solid fa-users"></i> Customers (CRM)
+        </a>
+        <a class="nav-link" href="reports.html">
+          <i class="fa-solid fa-chart-line"></i> Analytics & Reports
+        </a>
+        <a class="nav-link" href="staff.html">
+          <i class="fa-solid fa-user-shield"></i> Staff & Shifts
+        </a>
+        <a class="nav-link active" href="settings.html">
+          <i class="fa-solid fa-gear"></i> Store Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title-group">
+            <h1>Store Settings & Backend Collab</h1>
+            <p>Configure tax rates, store branding, receipts and Express API connection</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <a href="login.html" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+          </a>
+          <div class="user-badge">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Store Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container" style="max-width: 1000px;">
+        <form id="settingsForm" onsubmit="saveStoreSettings(event)">
+          <!-- Backend Collab Panel -->
+          <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--primary);">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-network-wired" style="color: var(--primary);"></i> Backend Developer API Integration
+              </div>
+              <span class="badge badge-success">Collaborator Ready</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px;">
+                RetailHub automatically detects your collaborator's Express server at port 5000. When offline, it runs in Standalone Mock mode with zero breakage.
+              </p>
+
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label class="form-label">Express Backend Base URL</label>
+                  <input type="text" id="apiEndpoint" class="form-control" value="http://localhost:5000" placeholder="http://localhost:5000">
+                </div>
+                <div class="form-group" style="flex: 1; display: flex; align-items: flex-end;">
+                  <button type="button" class="btn btn-secondary" style="width: 100%; margin-bottom: 18px;" onclick="testBackendLink()">
+                    <i class="fa-solid fa-plug"></i> Test Connection
+                  </button>
+                </div>
+              </div>
+
+              <div id="connectionStatusBox" style="background: var(--surface-alt); border-radius: var(--radius-md); padding: 12px 16px; font-size: 13px;">
+                Checking live API status...
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Profile Card -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-store"></i> Store Profile & Receipt Info</div>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Business / Store Trade Name <span class="required">*</span></label>
+                <input type="text" id="storeName" class="form-control" required placeholder="RetailHub Store">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">GSTIN / Tax ID <span class="required">*</span></label>
+                  <input type="text" id="gstin" class="form-control" placeholder="27AABCR1234D1ZP">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Customer Support Phone <span class="required">*</span></label>
+                  <input type="text" id="storePhone" class="form-control" placeholder="+91 98000 11111">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Physical Store Address</label>
+                <textarea id="storeAddress" class="form-control" rows="2" placeholder="Full store address printed on customer receipts"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Receipt Footer Note</label>
+                <input type="text" id="receiptFooter" class="form-control" placeholder="Thank you for shopping with us! Visit again.">
+              </div>
+            </div>
+          </div>
+
+          <!-- Currency & Taxes Card -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-calculator"></i> Currency & Taxation</div>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Currency Symbol</label>
+                  <select id="currencySymbol" class="form-select">
+                    <option value="₹">₹ (INR - Indian Rupee)</option>
+                    <option value="$">$ (USD - US Dollar)</option>
+                    <option value="€">€ (EUR - Euro)</option>
+                    <option value="£">£ (GBP - British Pound)</option>
+                    <option value="AED">AED (UAE Dirham)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Default GST / Tax Rate (%)</label>
+                  <input type="number" id="taxRate" class="form-control" value="18" min="0" max="100">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <div style="display: flex; gap: 14px; justify-content: flex-end; margin-bottom: 30px;">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-floppy-disk"></i> Save Preferences
+            </button>
+          </div>
+        </form>
+
+        <!-- Danger Zone Data Reset -->
+        <div class="card" style="border: 1px solid #fecaca;">
+          <div class="card-header" style="background: #fff5f5;">
+            <div class="card-title" style="color: var(--danger);">
+              <i class="fa-solid fa-triangle-exclamation"></i> Data Administration & Reset
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px;">
+              Export full system state for backup or reload fresh demo data (products, sales, stock, staff) to test from scratch.
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary" onclick="exportFullBackup()">
+                <i class="fa-solid fa-download"></i> Export JSON Backup
+              </button>
+              <button type="button" class="btn btn-outline-danger" onclick="resetToSampleData()">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Sample Retail Store Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

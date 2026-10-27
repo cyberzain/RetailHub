@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Inventory, Stock Movement Ledger & Batch Tracking</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+        <a class="nav-link" href="pos.html"><i class="fa-solid fa-cash-register"></i> POS Terminal <span class="badge badge-success">Live</span></a>
+        <a class="nav-link" href="sales.html"><i class="fa-solid fa-receipt"></i> Sales History</a>
+        <a class="nav-link" href="invoices.html"><i class="fa-solid fa-file-invoice-dollar"></i> Invoices</a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html"><i class="fa-solid fa-box-open"></i> Products</a>
+        <a class="nav-link" href="categories.html"><i class="fa-solid fa-tags"></i> Categories</a>
+        <a class="nav-link active" href="inventory.html"><i class="fa-solid fa-warehouse"></i> Inventory & Ledger</a>
+        <a class="nav-link" href="purchases.html"><i class="fa-solid fa-cart-flatbed"></i> Purchase Orders</a>
+        <a class="nav-link" href="suppliers.html"><i class="fa-solid fa-truck-field"></i> Suppliers</a>
+
+        <div class="nav-section-title">Finance & Cash</div>
+        <a class="nav-link" href="expenses.html"><i class="fa-solid fa-money-bill-transfer"></i> Expenses & Register</a>
+        <a class="nav-link" href="customers.html"><i class="fa-solid fa-users"></i> Customers & Khata</a>
+        <a class="nav-link" href="reports.html"><i class="fa-solid fa-chart-line"></i> Analytics & Reports</a>
+
+        <div class="nav-section-title">Store & Growth</div>
+        <a class="nav-link" href="loyalty.html"><i class="fa-solid fa-award"></i> Loyalty & Coupons</a>
+        <a class="nav-link" href="branches.html"><i class="fa-solid fa-code-branch"></i> Multi-Branches</a>
+        <a class="nav-link" href="storefront.html" target="_blank"><i class="fa-solid fa-globe"></i> Online Storefront</a>
+        <a class="nav-link" href="ai-insights.html"><i class="fa-solid fa-brain"></i> AI Insights</a>
+        <a class="nav-link" href="staff.html"><i class="fa-solid fa-user-shield"></i> Staff & Shifts</a>
+        <a class="nav-link" href="settings.html"><i class="fa-solid fa-gear"></i> Store Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Dashboard</a>
+              <span class="separator">/</span>
+              <span class="current">Inventory</span>
+            </div>
+            <div class="page-title-group">
+              <h1>Inventory & Stock Ledger</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <a href="purchases.html" class="btn btn-primary">
+            <i class="fa-solid fa-cart-plus"></i> Reorder Items
+          </a>
+          <div class="user-badge" onclick="toggleUserMenu()">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container">
+        <!-- Stock Summary KPI Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div>
+              <div class="metric-title">Total Inventory Valuation</div>
+              <div class="metric-value" id="val-total">₹0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-shield"></i> Asset value (Cost × Qty)</div>
+            </div>
+            <div class="metric-icon-wrap primary"><i class="fa-solid fa-sack-dollar"></i></div>
+          </div>
+
+          <div class="metric-card success">
+            <div>
+              <div class="metric-title">Total Units On Hand</div>
+              <div class="metric-value" id="val-units">0</div>
+              <div class="metric-trend up"><i class="fa-solid fa-boxes-stacked"></i> Across warehouse</div>
+            </div>
+            <div class="metric-icon-wrap success"><i class="fa-solid fa-layer-group"></i></div>
+          </div>
+
+          <div class="metric-card warning">
+            <div>
+              <div class="metric-title">Reorder Threshold Alerts</div>
+              <div class="metric-value" id="val-low">0</div>
+              <div class="metric-trend down"><i class="fa-solid fa-bell"></i> Below minimum stock</div>
+            </div>
+            <div class="metric-icon-wrap warning"><i class="fa-solid fa-circle-exclamation"></i></div>
+          </div>
+
+          <div class="metric-card info">
+            <div>
+              <div class="metric-title">Out of Stock Count</div>
+              <div class="metric-value" id="val-out">0</div>
+              <div class="metric-trend neutral"><i class="fa-solid fa-ban"></i> Zero inventory</div>
+            </div>
+            <div class="metric-icon-wrap info"><i class="fa-solid fa-box-open"></i></div>
+          </div>
+        </div>
+
+        <!-- Inventory Tabs -->
+        <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 20px;">
+          <button class="btn btn-secondary active-tab-btn" id="tabBtnStock" onclick="switchInvTab('stock')">
+            <i class="fa-solid fa-list-check"></i> Stock Levels
+          </button>
+          <button class="btn btn-secondary" id="tabBtnLedger" onclick="switchInvTab('ledger')">
+            <i class="fa-solid fa-book"></i> Stock Movement Ledger (Audit)
+          </button>
+          <button class="btn btn-secondary" id="tabBtnBatch" onclick="switchInvTab('batch')">
+            <i class="fa-solid fa-calendar-days"></i> Batch & Expiry
+          </button>
+        </div>
+
+        <!-- TAB 1: Stock Levels -->
+        <div id="tabContentStock">
+          <div class="action-bar">
+            <div class="filter-group">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="invSearch" placeholder="Search by name, SKU or barcode..." oninput="filterInventory()">
+              </div>
+              <select class="form-select" id="invStatusFilter" onchange="filterInventory()" style="width: 180px;">
+                <option value="ALL">All Items</option>
+                <option value="LOW">Low Stock Only</option>
+                <option value="OUT">Out of Stock Only</option>
+                <option value="OK">Sufficient Stock</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVFileSelect(event)">
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('csvFileInput').click()">
+                <i class="fa-solid fa-file-import"></i> Import CSV
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="exportInventoryCSV()">
+                <i class="fa-solid fa-file-export"></i> Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Product & Category</th>
+                    <th>SKU / Barcode</th>
+                    <th>Current Stock</th>
+                    <th>Min Safety Level</th>
+                    <th>Valuation</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Stock Action</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                  <tr><td colspan="7" style="text-align: center; padding: 25px;">Loading inventory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Stock Movement Ledger -->
+        <div id="tabContentLedger" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-timeline" style="color: var(--primary);"></i> Stock Movement Ledger (Audit Log)</div>
+              <span class="badge badge-primary">Immutable Trail</span>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Movement ID</th>
+                    <th>Product Name</th>
+                    <th>Movement Type</th>
+                    <th>Quantity</th>
+                    <th>Reference / Reason</th>
+                    <th>Recorded By</th>
+                  </tr>
+                </thead>
+                <tbody id="ledgerTableBody">
+                  <tr><td colspan="7" style="text-align: center; padding: 25px;">Loading ledger...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Batch & Expiry -->
+        <div id="tabContentBatch" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-calendar-xmark" style="color: var(--warning);"></i> Batch Numbers & Shelf Expiry Tracking</div>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Batch #</th>
+                    <th>Manufacture Date</th>
+                    <th>Expiry Date</th>
+                    <th>Days Remaining</th>
+                    <th>Batch Quantity</th>
+                    <th>Expiry Risk</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Sony WH-1000XM5 Headphones</strong></td>
+                    <td><code>BCH-2026-X9</code></td>
+                    <td>2026-01-15</td>
+                    <td>2028-01-15</td>
+                    <td>455 Days</td>
+                    <td>22 Pcs</td>
+                    <td><span class="badge badge-success">Good Condition</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Logitech MX Master 3S Mouse</strong></td>
+                    <td><code>BCH-2025-L4</code></td>
+                    <td>2025-08-10</td>
+                    <td>2027-08-10</td>
+                    <td>297 Days</td>
+                    <td>3 Pcs</td>
+                    <td><span class="badge badge-success">Good Condition</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nike Air Max Pulse</strong></td>
+                    <td><code>BCH-2026-N2</code></td>
+                    <td>2026-03-01</td>
+                    <td>2029-03-01</td>
+                    <td>865 Days</td>
+                    <td>12 Pairs</td>
+                    <td><span class="badge badge-success">Fresh Stock</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Stock Adjustment Modal -->
+  <div class="modal-overlay" id="adjustModal">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Adjust Stock Level</h3>
+        <button class="modal-close" onclick="closeModal('adjustModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="adjustForm" onsubmit="saveStockAdjustment(event)">
+        <div class="modal-body">
+          <input type="hidden" id="adjustProdId">
+          <div class="form-group">
+            <label class="form-label">Product</label>
+            <input type="text" id="adjustProdName" class="form-control" readonly style="background: var(--surface-alt); font-weight: 600;">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Current Stock</label>
+              <input type="number" id="adjustCurrentStock" class="form-control" readonly style="background: var(--surface-alt);">
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Stock Quantity <span class="required">*</span></label>
+              <input type="number" id="adjustNewStock" class="form-control" required min="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adjustment Reason <span class="required">*</span></label>
+            <select id="adjustReason" class="form-select" required>
+              <option value="Physical Stock Audit">Physical Stock Count / Audit</option>
+              <option value="Damaged / Expired Item">Damaged / Expired Item</option>
+              <option value="Shipment Inbound">Shipment Inbound</option>
+              <option value="Discrepancy Correction">Discrepancy Correction</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('adjustModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Quantity & Ledger</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CSV Import Preview & Validation Modal -->
+  <div class="modal-overlay" id="csvPreviewModal">
+    <div class="modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-file-csv"></i> CSV Import Preview & Validation</h3>
+        <button class="modal-close" onclick="closeModal('csvPreviewModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div id="csvValidationSummary" style="margin-bottom: 14px; font-size: 13.5px;"></div>
+        <div class="table-responsive" style="max-height: 280px;">
+          <table class="custom-table" id="csvPreviewTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Cost</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Validation</th>
+              </tr>
+            </thead>
+            <tbody id="csvPreviewTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('csvPreviewModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmCsvImportBtn" onclick="applyCsvImport()">
+          <i class="fa-solid fa-check"></i> Confirm & Import Valid Items
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/inventory.js"></script>
+</body>
+</html>

@@ -1,15 +1,15 @@
 # RetailHub - Production REST API Specification & Contract (v1.0)
 
-This document formalizes the production API contract between the **RetailHub Frontend** (`frontend/`) and the **Node.js/Express Backend** (`backend/`).
+This document formalizes the production API contract between the **RetailHub React Frontend** (`frontend/`) and the **Node.js/Express PostgreSQL Backend** (`backend/`).
 
 ## Architectural Highlights
 - **Base Endpoint**: `http://localhost:5000/api/v1`
-- **Database Engine**: MongoDB (Mongoose ODM). See [MONGODB_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/MONGODB_SCHEMA.md) for full collection schemas and indexes.
-- **MongoDB ID Standardization**: Every document exposes both native MongoDB `_id` (24-char hex ObjectId) and string `id`. Frontend automatically handles and normalizes both formats.
+- **Database Engine**: PostgreSQL 14+ (Relational). See [POSTGRESQL_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/POSTGRESQL_SCHEMA.md) for full SQL table DDL, indexes, and constraints.
+- **Frontend Framework**: React 18+ (Vite SPA) with contextual state management and local fallback engine.
 - **Security & Authorization**: Standard Bearer JWT tokens (`Authorization: Bearer <token>`) passed via HTTP headers.
-- **Idempotency Protection**: Every POS sale submission supports client-generated `idempotencyKey` values. Duplicate submissions with identical keys return the existing record without duplicate stock deductions.
-- **Server Verification Flag**: All sales returned have `serverConfirmed: true` when stored by the database. If offline, the client queues them with `serverConfirmed: false` until network re-establishment.
+- **Idempotency Protection**: Every POS sale submission supports client-generated `idempotencyKey` values to prevent duplicate transaction deductions.
 - **Role Scoping**: Multi-role support for `Owner`, `Manager`, and `Salesperson` with branch isolation (`branchId`).
+
 
 
 ---

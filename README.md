@@ -70,29 +70,29 @@ RetailHub is a modern, production-oriented retail management and Point of Sale (
 ## 🤝 Team Collaboration & Architecture Division
 
 RetailHub is engineered with strict separation of concerns for collaborative development:
-- **Frontend Lead**: Owns `frontend/` (Pure HTML5, CSS3, Vanilla JavaScript, zero build dependencies). Includes offline sync engine and MongoDB ObjectId compatibility.
-- **Backend Lead**: Owns `backend/` (Node.js, Express.js, Mongoose ODM, and MongoDB database).
-- **Database**: MongoDB (Local `mongodb://127.0.0.1:27017/retailhub` or MongoDB Atlas).
+- **Frontend Lead**: Owns `frontend/` built with **React 18 & Vite**. Includes modular components, context state management, offline sync engine, and hardware USB barcode scanner buffer.
+- **Backend Lead**: Owns `backend/` using **Node.js, Express.js, and PostgreSQL**.
+- **Database**: PostgreSQL 14+ (Local `postgresql://postgres:postgres@localhost:5432/retailhub` or Supabase/Neon/AWS RDS).
 
 ---
 
 ## 🚀 Running RetailHub
 
-### 1. Launch Frontend (Works Standalone & Live)
-The frontend works immediately in any browser using its built-in offline sync engine:
+### 1. Launch React Frontend (Works Standalone & Live)
+The React frontend works immediately with its built-in offline engine:
 ```powershell
 cd frontend
-npx serve -l 3000
+npm run dev
 ```
-Open **`http://localhost:3000/login.html`** or **`http://localhost:3000/pos.html`**.
+Open **`http://localhost:3000`** in your browser.
 
 Demo credentials:
 - **Manager**: `manager@retailhub.com` / `admin123` (PIN: `1234`)
 - **Salesperson**: `cashier@retailhub.com` / `admin123` (PIN: `0000`)
 - **Owner**: `owner@retailhub.com` / `admin123` (PIN: `1234`)
 
-### 2. Backend Partner Setup (Express & MongoDB)
-See [backend/README.md](file:///c:/Users/zainu/Desktop/RetailHub/backend/README.md) and [docs/MONGODB_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/MONGODB_SCHEMA.md):
+### 2. Backend Partner Setup (Express & PostgreSQL)
+See [backend/README.md](file:///c:/Users/zainu/Desktop/RetailHub/backend/README.md) and [docs/POSTGRESQL_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/POSTGRESQL_SCHEMA.md):
 ```powershell
 cd backend
 npm install
@@ -102,7 +102,8 @@ npm run dev
 ---
 
 ## 📄 Documentation & Contracts
-- **[docs/MONGODB_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/MONGODB_SCHEMA.md)**: 10 complete Mongoose models, indexes, and database seed script.
+- **[docs/POSTGRESQL_SCHEMA.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/POSTGRESQL_SCHEMA.md)**: Production PostgreSQL DDL schema with 12 relational tables, indexes, constraints, and seed SQL.
 - **[docs/API_CONTRACT.md](file:///c:/Users/zainu/Desktop/RetailHub/docs/API_CONTRACT.md)**: REST API contract, request/response envelopes, and status codes.
 - **[backend/README.md](file:///c:/Users/zainu/Desktop/RetailHub/backend/README.md)**: Backend developer onboarding and environment guide.
+
 

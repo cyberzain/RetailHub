@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailHub | Multi-Store Branches & Stock Transfers</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="brand-icon"><i class="fa-solid fa-store"></i></div>
+          <span>Retail</span>Hub
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-link" href="index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+        <a class="nav-link" href="pos.html"><i class="fa-solid fa-cash-register"></i> POS Terminal <span class="badge badge-success">Live</span></a>
+        <a class="nav-link" href="sales.html"><i class="fa-solid fa-receipt"></i> Sales History</a>
+        <a class="nav-link" href="returns.html"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
+        <a class="nav-link" href="invoices.html"><i class="fa-solid fa-file-invoice-dollar"></i> Invoices</a>
+
+        <div class="nav-section-title">Catalog & Stock</div>
+        <a class="nav-link" href="products.html"><i class="fa-solid fa-box-open"></i> Products</a>
+        <a class="nav-link" href="categories.html"><i class="fa-solid fa-tags"></i> Categories</a>
+        <a class="nav-link" href="inventory.html"><i class="fa-solid fa-warehouse"></i> Inventory & Ledger</a>
+        <a class="nav-link" href="purchases.html"><i class="fa-solid fa-cart-flatbed"></i> Purchase Orders</a>
+        <a class="nav-link" href="suppliers.html"><i class="fa-solid fa-truck-field"></i> Suppliers</a>
+
+        <div class="nav-section-title">Finance & Cash</div>
+        <a class="nav-link" href="expenses.html"><i class="fa-solid fa-money-bill-transfer"></i> Expenses & Register</a>
+        <a class="nav-link" href="customers.html"><i class="fa-solid fa-users"></i> Customers & Khata</a>
+        <a class="nav-link" href="reports.html"><i class="fa-solid fa-chart-line"></i> Analytics & Reports</a>
+
+        <div class="nav-section-title">Store & Growth</div>
+        <a class="nav-link" href="loyalty.html"><i class="fa-solid fa-award"></i> Loyalty & Coupons</a>
+        <a class="nav-link active" href="branches.html"><i class="fa-solid fa-code-branch"></i> Multi-Branches</a>
+        <a class="nav-link" href="storefront.html" target="_blank"><i class="fa-solid fa-globe"></i> Online Storefront</a>
+        <a class="nav-link" href="ai-insights.html"><i class="fa-solid fa-brain"></i> AI Insights</a>
+        <a class="nav-link" href="staff.html"><i class="fa-solid fa-user-shield"></i> Staff & Shifts</a>
+        <a class="nav-link" href="settings.html"><i class="fa-solid fa-gear"></i> Store Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="backend-pill">
+          <span id="backend-dot" class="backend-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Dashboard</a>
+              <span class="separator">/</span>
+              <span class="current">Branches</span>
+            </div>
+            <div class="page-title-group">
+              <h1>Multi-Store Branches & Stock Transfers</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="openTransferModal()">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer Stock
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="openBranchModal()">
+            <i class="fa-solid fa-plus"></i> Add Branch
+          </button>
+          <div class="user-badge" onclick="toggleUserMenu()">
+            <div class="user-avatar">ZK</div>
+            <div class="user-info">
+              <span class="user-name">Zain Khan</span>
+              <span class="user-role">Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-container">
+        <!-- Branches Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 28px;" id="branchesGrid"></div>
+
+        <!-- Stock Transfer Ledger Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-truck-moving"></i> Inter-Branch Stock Transfers History</div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Transfer ID</th>
+                  <th>Source Branch</th>
+                  <th>Destination Branch</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="transferHistoryTbody">
+                <tr>
+                  <td><code>TRF-2026-01</code></td>
+                  <td>Main Flagship (Bandra)</td>
+                  <td>Suburban Outlet (Andheri)</td>
+                  <td>Sony WH-1000XM5</td>
+                  <td>5 Pcs</td>
+                  <td>2026-10-15</td>
+                  <td><span class="badge badge-success"><i class="fa-solid fa-check"></i> Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Branch Modal -->
+  <div class="modal-overlay" id="branchModal">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Store Branch</h3>
+        <button class="modal-close" onclick="closeModal('branchModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="branchForm" onsubmit="saveBranch(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Branch Name <span class="required">*</span></label>
+            <input type="text" id="branchName" class="form-control" required placeholder="e.g. Pune Outlet (MG Road)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address / Location</label>
+            <textarea id="branchAddress" class="form-control" rows="2" placeholder="Store address"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('branchModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Branch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Inter-Branch Stock Transfer Modal -->
+  <div class="modal-overlay" id="transferModal">
+    <div class="modal" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Initiate Stock Transfer</h3>
+        <button class="modal-close" onclick="closeModal('transferModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="transferForm" onsubmit="executeStockTransfer(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Source Branch (From) <span class="required">*</span></label>
+            <select id="transferFrom" class="form-select">
+              <option value="Main Flagship Store (Bandra)">Main Flagship Store (Bandra)</option>
+              <option value="Suburban Outlet (Andheri)">Suburban Outlet (Andheri)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Destination Branch (To) <span class="required">*</span></label>
+            <select id="transferTo" class="form-select">
+              <option value="Suburban Outlet (Andheri)">Suburban Outlet (Andheri)</option>
+              <option value="Main Flagship Store (Bandra)">Main Flagship Store (Bandra)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Select Product <span class="required">*</span></label>
+            <select id="transferProduct" class="form-select"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transfer Quantity <span class="required">*</span></label>
+            <input type="number" id="transferQty" class="form-control" required min="1" value="5">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Dispatch Transfer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    async function loadBranchesPage() {
+      const branches = await api.getBranches();
+      const products = await api.getProducts();
+
+      const grid = document.getElementById("branchesGrid");
+      grid.innerHTML = branches.map(b => `
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <span class="badge ${b.isMain ? 'badge-primary' : 'badge-gray'}">${b.isMain ? 'Flagship Store' : 'Branch Outlet'}</span>
+              <h3 style="font-size: 16px; font-weight: 800; margin-top: 6px;">${escapeHTML(b.name)}</h3>
+            </div>
+            <code>${b.id}</code>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+            <i class="fa-solid fa-location-dot" style="margin-right: 4px;"></i>${escapeHTML(b.address)}
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 12px;">
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Stock Scoped</span>
+            <span class="badge badge-success">Online & Synced</span>
+          </div>
+        </div>
+      `).join("");
+
+      // Populate transfer product options
+      const pSelect = document.getElementById("transferProduct");
+      pSelect.innerHTML = products.map(p => `
+        <option value="${p.id}">${escapeHTML(p.name)} (${p.stock} in stock)</option>
+      `).join("");
+    }
+
+    function openBranchModal() {
+      document.getElementById("branchName").value = "";
+      document.getElementById("branchAddress").value = "";
+      openModal("branchModal");
+    }
+
+    async function saveBranch(e) {
+      e.preventDefault();
+      const name = document.getElementById("branchName").value.trim();
+      const address = document.getElementById("branchAddress").value.trim();
+      await api.addBranch({ name, address, isMain: false });
+      showToast("Store branch created!", "success");
+      closeModal("branchModal");
+      await loadBranchesPage();
+    }
+
+    function openTransferModal() {
+      openModal("transferModal");
+    }
+
+    function executeStockTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById("transferFrom").value;
+      const to = document.getElementById("transferTo").value;
+      if (from === to) return showToast("Source and destination branch cannot be the same", "error");
+
+      const qty = document.getElementById("transferQty").value;
+      const prodText = document.getElementById("transferProduct").selectedOptions[0].text;
+
+      openConfirmModal({
+        title: "Confirm Inter-Branch Transfer",
+        message: `Transfer ${qty} units of ${prodText} from ${from} to ${to}?`,
+        confirmText: "Execute Transfer",
+        onConfirm: () => {
+          showToast(`Stock transfer of ${qty} units initiated!`, "success");
+          closeModal("transferModal");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadBranchesPage);
+  </script>
+</body>
+</html>
