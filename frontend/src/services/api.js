@@ -169,6 +169,10 @@ try {
   ["rh_react_sales", "rh_react_products", "rh_react_customers", "rh_react_expenses", "rh_react_cashRegister", "rh_react_settings", "rh_react_usd_sales", "rh_react_usd_products", "rh_react_usd_customers"].forEach(legacyKey => {
     localStorage.removeItem(legacyKey);
   });
+  const cur = localStorage.getItem("retailhub_current_user");
+  if (cur === "undefined" || cur === "null") {
+    localStorage.removeItem("retailhub_current_user");
+  }
 } catch (_) {}
 
 // Local storage helper
@@ -301,8 +305,15 @@ export const api = {
   },
 
   getCurrentUser() {
-    const raw = localStorage.getItem("retailhub_current_user");
-    return raw ? JSON.parse(raw) : { id: "EMP-01", name: "Zain Khan", role: "Owner", email: "owner@retailhub.com", status: "Active" };
+    try {
+      const raw = localStorage.getItem("retailhub_current_user");
+      if (!raw || raw === "undefined" || raw === "null") {
+        return { id: "EMP-01", name: "Zain Khan", role: "Owner", email: "owner@retailhub.com", status: "Active" };
+      }
+      return JSON.parse(raw);
+    } catch {
+      return { id: "EMP-01", name: "Zain Khan", role: "Owner", email: "owner@retailhub.com", status: "Active" };
+    }
   },
 
   logout() {
@@ -520,8 +531,13 @@ export const api = {
   },
 
   async getCashRegister() {
-    const raw = localStorage.getItem(`${DB_PREFIX}cashRegister`);
-    return raw ? JSON.parse(raw) : INITIAL_SEED.cashRegister;
+    try {
+      const raw = localStorage.getItem(`${DB_PREFIX}cashRegister`);
+      if (!raw || raw === "undefined" || raw === "null") return INITIAL_SEED.cashRegister;
+      return JSON.parse(raw);
+    } catch {
+      return INITIAL_SEED.cashRegister;
+    }
   },
 
   async closeCashRegister(countedCash, closingNotes = "") {
@@ -566,8 +582,13 @@ export const api = {
 
   // Settings
   async getSettings() {
-    const raw = localStorage.getItem(`${DB_PREFIX}settings`);
-    return raw ? JSON.parse(raw) : INITIAL_SEED.settings;
+    try {
+      const raw = localStorage.getItem(`${DB_PREFIX}settings`);
+      if (!raw || raw === "undefined" || raw === "null") return INITIAL_SEED.settings;
+      return JSON.parse(raw);
+    } catch {
+      return INITIAL_SEED.settings;
+    }
   },
 
   async saveSettings(settings) {
