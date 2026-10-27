@@ -103,7 +103,7 @@ const INITIAL_SEED = {
       discount: 10.00,
       total: 238.96,
       costTotal: 145.00,
-      paymentMethod: "UPI",
+      paymentMethod: "Digital Wallet",
       status: "Paid",
       cashier: "Anjali M.",
       idempotencyKey: "seed-1093"
@@ -415,7 +415,7 @@ export const api = {
         c.totalSpent = (c.totalSpent || 0) + saleData.total;
         c.visits = (c.visits || 0) + 1;
         c.points = (c.points || 0) + Math.round(saleData.total / 100);
-        if (saleData.paymentMethod === "Store Credit (Khata)") {
+        if (saleData.paymentMethod === "Store Credit" || saleData.paymentMethod === "Store Credit (Khata)") {
           c.creditBalance = (c.creditBalance || 0) + saleData.total;
         }
         db.set("customers", custs);
@@ -481,6 +481,10 @@ export const api = {
   },
 
   async recordKhataPayment(customerId, amount) {
+    return this.recordCustomerPayment(customerId, amount);
+  },
+
+  async recordCustomerPayment(customerId, amount) {
     const custs = db.get("customers");
     const c = custs.find(x => x.id === customerId);
     if (!c) return null;

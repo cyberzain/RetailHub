@@ -27,11 +27,11 @@ export default function Dashboard({ setTab }) {
       sub: "Average ~28% margin"
     },
     {
-      label: "Khata Credit Receivables",
+      label: "Accounts Receivable",
       value: formatCurrency(totalOutstandingCredit),
       icon: "fa-book-bookmark",
       color: "#d97706",
-      sub: "Customer dues pending"
+      sub: "Customer credit balances"
     },
     {
       label: "Active Products in Store",
@@ -94,7 +94,7 @@ export default function Dashboard({ setTab }) {
             <i className="fa-solid fa-warehouse"></i> Inventory Stock Audit
           </button>
           <button className="btn btn-secondary" onClick={() => setTab("customers")} style={{ padding: "10px 18px", fontSize: "13px" }}>
-            <i className="fa-solid fa-users"></i> Khata Credit Ledger
+            <i className="fa-solid fa-users"></i> Customer Credit Accounts
           </button>
           <button className="btn btn-secondary" onClick={() => setTab("reports")} style={{ padding: "10px 18px", fontSize: "13px" }}>
             <i className="fa-solid fa-file-invoice"></i> Financial Reports

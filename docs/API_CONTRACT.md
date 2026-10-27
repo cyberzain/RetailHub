@@ -190,17 +190,17 @@ This document formalizes the production API contract between the **RetailHub Rea
 ## 4. POS Billing & Invoicing Engine
 
 ### `POST /api/v1/sales`
-- **Description**: Finalizes cart sale, calculates tax/subtotals on server, validates sufficient stock, decrements inventory safely, and updates customer Khata/points.
+- **Description**: Finalizes cart sale, calculates tax/subtotals on server, validates sufficient stock, decrements inventory safely, and updates customer credit/points.
 - **Request Body**:
 ```json
 {
   "customer": "Aarav Sharma",
   "items": [
-    { "id": "PRD-101", "name": "Apple iPhone 15 Pro (128GB)", "qty": 1, "price": 129900 },
-    { "id": "PRD-103", "name": "Sony WH-1000XM5 Headphones", "qty": 1, "price": 26990 }
+    { "id": "PRD-101", "name": "Apple iPhone 15 Pro (128GB)", "qty": 1, "price": 999.00 },
+    { "id": "PRD-103", "name": "Sony WH-1000XM5 Headphones", "qty": 1, "price": 399.00 }
   ],
-  "discount": 2000,
-  "paymentMethod": "Cash",
+  "discount": 50.00,
+  "paymentMethod": "Card",
   "idempotencyKey": "SALE-1729100000-xyz12"
 }
 ```
@@ -210,16 +210,16 @@ This document formalizes the production API contract between the **RetailHub Rea
   "success": true,
   "data": {
     "id": "INV-1095",
-    "date": "2026-10-16",
+    "date": "2026-10-28",
     "time": "14:32",
     "customer": "Aarav Sharma",
     "items": [...],
-    "subtotal": 156890,
-    "tax": 28240,
-    "discount": 2000,
-    "total": 183130,
-    "costTotal": 131000,
-    "paymentMethod": "Cash",
+    "subtotal": 1398.00,
+    "tax": 115.34,
+    "discount": 50.00,
+    "total": 1463.34,
+    "costTotal": 1079.00,
+    "paymentMethod": "Card",
     "status": "Paid",
     "cashier": "Zain Khan",
     "serverConfirmed": true,
@@ -234,7 +234,7 @@ This document formalizes the production API contract between the **RetailHub Rea
 ```json
 {
   "returnedItems": [{ "name": "Apple iPhone 15 Pro (128GB)", "qty": 1 }],
-  "refundAmount": 129900,
+  "refundAmount": 999.00,
   "reason": "Customer changed mind - unopened box"
 }
 ```
@@ -242,17 +242,17 @@ This document formalizes the production API contract between the **RetailHub Rea
 
 ---
 
-## 5. Customers & Khata Credit Ledger
+## 5. Customers & Credit Ledger (Accounts Receivable)
 
 ### `GET /api/v1/customers`
-- Returns customers with loyalty points and outstanding Khata balances.
+- Returns customers with loyalty points and outstanding credit balances.
 
 ### `POST /api/v1/customers` (Requires Auth)
-- **Request Body**: `{ "name": "Pooja Verma", "phone": "+91 98111 22334", "email": "pooja@example.com" }`
+- **Request Body**: `{ "name": "Pooja Verma", "phone": "+1 (555) 789-0123", "email": "pooja@example.com" }`
 
 ### `POST /api/v1/customers/:id/payment` (Requires Auth)
 - **Description**: Records settlement payment against customer's credit balance.
-- **Request Body**: `{ "amount": 2500 }`
+- **Request Body**: `{ "amount": 150.00 }`
 - **Side Effect**: Decrements `creditBalance` and records activity log.
 
 ---

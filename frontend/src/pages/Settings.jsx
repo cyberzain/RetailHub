@@ -58,7 +58,7 @@ export default function Settings() {
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
             <div className="form-group">
-              <label className="form-label">GSTIN / Tax ID Number</label>
+              <label className="form-label">Tax ID / VAT / EIN Registration Number</label>
               <input
                 type="text"
                 className="form-control"

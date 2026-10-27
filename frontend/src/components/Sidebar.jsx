@@ -18,7 +18,7 @@ export default function Sidebar({ currentTab, setTab, isOpen, setIsOpen }) {
     { key: "dashboard", label: "Dashboard", icon: "fa-chart-pie", roles: ["Owner", "Manager"] },
     { key: "products", label: "Products", icon: "fa-boxes-stacked", roles: ["Owner", "Manager"] },
     { key: "inventory", label: "Inventory", icon: "fa-warehouse", roles: ["Owner", "Manager"] },
-    { key: "customers", label: "Customers & Khata", icon: "fa-users", roles: ["Owner", "Manager", "Salesperson"] },
+    { key: "customers", label: "Customers & Accounts", icon: "fa-users", roles: ["Owner", "Manager", "Salesperson"] },
     { key: "sales", label: "Sales & Invoices", icon: "fa-file-invoice-dollar", roles: ["Owner", "Manager", "Salesperson"] },
     { key: "purchases", label: "Purchase Orders", icon: "fa-cart-flatbed", roles: ["Owner", "Manager"] },
     { key: "suppliers", label: "Suppliers", icon: "fa-truck-field", roles: ["Owner", "Manager"] },

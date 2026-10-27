@@ -348,7 +348,7 @@ export default function POS() {
             <div style={{ marginTop: "8px", padding: "8px", borderRadius: "8px", background: "#f8fafc", fontSize: "11.5px", display: "flex", justifyContent: "space-between" }}>
               <span>Loyalty Points: <strong>{selectedCustomer.points || 0} pts</strong></span>
               <span style={{ color: selectedCustomer.creditBalance > 0 ? "#b91c1c" : "inherit" }}>
-                Khata Due: <strong>{formatCurrency(selectedCustomer.creditBalance)}</strong>
+                Account Due: <strong>{formatCurrency(selectedCustomer.creditBalance)}</strong>
               </span>
             </div>
           )}
@@ -627,7 +627,7 @@ export default function POS() {
               <div style={{ marginBottom: "16px" }}>
                 <label className="form-label" style={{ fontWeight: "700", marginBottom: "8px" }}>Select Payment Mode</label>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
-                  {["Cash", "UPI", "Card", "Store Credit (Khata)", "Split"].map((pm) => (
+                  {["Cash", "Card", "Digital Wallet", "Store Credit", "Split"].map((pm) => (
                     <button
                       key={pm}
                       type="button"
@@ -772,8 +772,8 @@ export default function POS() {
             <div className="modal-body printable-receipt" style={{ fontFamily: "monospace", fontSize: "13px", lineHeight: "1.4" }}>
               <div style={{ textAlign: "center", marginBottom: "14px" }}>
                 <h2 style={{ margin: "0 0 4px", fontSize: "18px", fontWeight: "900" }}>RETAILHUB STORE</h2>
-                <div>Shop 14, Commercial Plaza, Bandra West</div>
-                <div>GSTIN: 27AABCR1234D1ZP</div>
+                <div>Suite 104, West Commerce Blvd, New York, NY 10001</div>
+                <div>Tax ID / EIN: US-TAX-88990123</div>
                 <div style={{ marginTop: "6px", fontSize: "11px", color: "#666" }}>
                   Invoice: #{lastCompletedSale.id} • {lastCompletedSale.date} {lastCompletedSale.time}
                 </div>

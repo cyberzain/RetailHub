@@ -13,7 +13,7 @@ export default function Navbar({ currentTab, setSidebarOpen }) {
     dashboard: "Store Overview & Executive Analytics",
     products: "Products & SKU Catalog",
     inventory: "Inventory & Stock Movement Ledger",
-    customers: "Customers CRM & Khata Ledger",
+    customers: "Customers CRM & Credit Accounts",
     sales: "Sales History & Tax Invoices",
     purchases: "Purchase Orders & Receiving",
     suppliers: "Suppliers & Payables",

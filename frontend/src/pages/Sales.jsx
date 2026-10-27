@@ -128,7 +128,7 @@ export default function Sales() {
             <div className="modal-body printable-receipt" style={{ fontFamily: "monospace", fontSize: "13px" }}>
               <div style={{ textAlign: "center", marginBottom: "12px" }}>
                 <div style={{ fontWeight: "800", fontSize: "16px" }}>RETAILHUB STORE</div>
-                <div>Shop 14, Commercial Plaza, Bandra West</div>
+                <div>Suite 104, West Commerce Blvd, New York, NY 10001</div>
                 <div>Date: {selectedSale.date} | Cashier: {selectedSale.cashier || "Staff"}</div>
               </div>
 

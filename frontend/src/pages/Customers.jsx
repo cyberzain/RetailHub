@@ -46,7 +46,7 @@ export default function Customers() {
     if (!whatsappConfirmCustomer) return;
     const cleanPhone = whatsappConfirmCustomer.phone.replace(/[^0-9]/g, "");
     const msg = encodeURIComponent(
-      `Dear ${whatsappConfirmCustomer.name}, this is a gentle payment reminder from RetailHub Store regarding your outstanding Khata balance of ${formatCurrency(whatsappConfirmCustomer.creditBalance)}. Thank you!`
+      `Dear ${whatsappConfirmCustomer.name}, this is a payment notification from RetailHub regarding your outstanding account balance of ${formatCurrency(whatsappConfirmCustomer.creditBalance)}. Thank you!`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${msg}`, "_blank");
     setWhatsappConfirmCustomer(null);
@@ -87,7 +87,7 @@ export default function Customers() {
               <th style={{ padding: "12px 16px" }}>Phone & Contact</th>
               <th style={{ padding: "12px 16px", textAlign: "center" }}>Loyalty Points</th>
               <th style={{ padding: "12px 16px", textAlign: "right" }}>Total Spend</th>
-              <th style={{ padding: "12px 16px", textAlign: "right" }}>Khata Balance</th>
+              <th style={{ padding: "12px 16px", textAlign: "right" }}>Credit Balance</th>
               <th style={{ padding: "12px 16px", textAlign: "right" }}>Actions</th>
             </tr>
           </thead>
@@ -129,7 +129,7 @@ export default function Customers() {
                             setPayAmount(c.creditBalance.toString());
                           }}
                         >
-                          Settle Khata
+                          Settle Account
                         </button>
                         <button
                           className="btn btn-secondary"
@@ -204,12 +204,12 @@ export default function Customers() {
         </div>
       )}
 
-      {/* Khata Payment Modal */}
+      {/* Credit Payment Modal */}
       {paymentCustomer && (
         <div className="modal-overlay" onClick={() => setPaymentCustomer(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "420px" }}>
             <div className="modal-header">
-              <h3>Settle Khata Credit Balance</h3>
+              <h3>Settle Customer Credit Balance</h3>
               <button className="modal-close-btn" onClick={() => setPaymentCustomer(null)}>
                 <i className="fa-solid fa-xmark"></i>
               </button>

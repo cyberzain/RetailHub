@@ -195,9 +195,9 @@ export default function Expenses() {
                   <label className="form-label">Paid By</label>
                   <select className="form-control" value={paidBy} onChange={(e) => setPaidBy(e.target.value)}>
                     <option value="Cash">Cash (from Till)</option>
-                    <option value="Bank">Bank Transfer</option>
-                    <option value="UPI">UPI</option>
-                    <option value="Card">Card</option>
+                    <option value="Bank">Bank Transfer / ACH Wire</option>
+                    <option value="Card">Credit / Debit Card</option>
+                    <option value="Digital Wallet">Digital Wallet (PayPal / Apple Pay)</option>
                   </select>
                 </div>
               </div>

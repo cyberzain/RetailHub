@@ -132,7 +132,7 @@ CREATE INDEX idx_products_category ON products(category);
 CREATE INDEX idx_products_search ON products USING GIN (to_tsvector('english', name || ' ' || COALESCE(sku, '') || ' ' || COALESCE(barcode, '')));
 
 -- ==========================================================
--- 6. CUSTOMERS & KHATA CREDIT LEDGER TABLE
+-- 6. CUSTOMERS & CREDIT LEDGER (ACCOUNTS RECEIVABLE) TABLE
 -- ==========================================================
 CREATE TABLE IF NOT EXISTS customers (
     id VARCHAR(50) PRIMARY KEY DEFAULT 'CUST-' || SUBSTRING(gen_random_uuid()::text, 1, 8),
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS customers (
     address TEXT DEFAULT '',
     points INT DEFAULT 0,
     total_spent NUMERIC(12,2) DEFAULT 0.00,
-    credit_balance NUMERIC(12,2) DEFAULT 0.00, -- Outstanding Khata balance owed
+    credit_balance NUMERIC(12,2) DEFAULT 0.00, -- Outstanding customer credit balance owed
     visits INT DEFAULT 1,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -206,8 +206,8 @@ CREATE TABLE IF NOT EXISTS sales (
     total NUMERIC(12,2) NOT NULL,
     cost_total NUMERIC(12,2) DEFAULT 0.00,
     profit NUMERIC(12,2) DEFAULT 0.00,
-    payment_method VARCHAR(50) DEFAULT 'Cash', -- 'Cash', 'Card', 'UPI', 'Store Credit (Khata)', 'Split'
-    payment_details JSONB DEFAULT '{}'::jsonb, -- Tender cash, change, UPI ref, card txn
+    payment_method VARCHAR(50) DEFAULT 'Cash', -- 'Cash', 'Card', 'Digital Wallet', 'Store Credit', 'Split'
+    payment_details JSONB DEFAULT '{}'::jsonb, -- Tender cash, change, wallet ref, card txn auth
     status VARCHAR(50) DEFAULT 'Paid', -- 'Paid', 'Pending', 'Refunded/Returned', 'Partially Paid'
     cashier VARCHAR(100) DEFAULT 'System',
     cashier_id VARCHAR(50) REFERENCES users(id) ON DELETE SET NULL,
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     category VARCHAR(100) DEFAULT 'Utilities', -- 'Utilities', 'Rent', 'Packaging', 'Salaries', etc.
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     expense_date DATE DEFAULT CURRENT_DATE,
-    paid_by VARCHAR(50) DEFAULT 'Bank', -- 'Bank', 'Cash', 'UPI', 'Card'
+    paid_by VARCHAR(50) DEFAULT 'Bank', -- 'Bank', 'Cash', 'Digital Wallet', 'Card'
     notes TEXT DEFAULT '',
     branch_id VARCHAR(50) REFERENCES branches(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
